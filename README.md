@@ -2,7 +2,7 @@
 
 ![N|Solid](https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAIEAAAAJGUxMGNmYWYxLTUxMGYtNDU5Zi05ZDE2LTZjNDZkMzgwYjE2Mw.png)
 
-Group2 :
+**Group2 :**
  ```html
 <KATRINI  Chrysanthi
 ```
