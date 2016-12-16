@@ -1,6 +1,6 @@
 # Master in Computer Vision - UE4 - Robotics Project
 
-[![N|Solid](http://ed-spim.univ-fcomte.fr/download/ed-spim/image/logos/ub.jpg)]
+![N|Solid](https://www.google.lu/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwisvurd3vjQAhUEBBoKHQeqDNwQjRwIBw&url=https%3A%2F%2Fwww.linkedin.com%2Fedu%2Funiversit%25C3%25A9-de-bourgogne-12490&bvm=bv.142059868,d.d2s&psig=AFQjCNErheraaLOUOSKU3yRSvEyUNgTc8g&ust=1481978624758121)
 
 Group2 :
  ```html
