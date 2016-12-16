@@ -1,5 +1,6 @@
-# MsCVS3-ROS
-This is the Robotic Project for the  of MSCV @ UB  Bastien Caspani
+# Master in Computer Vision - UE4 - Robotics Project
+
+[![N|Solid](http://ed-spim.univ-fcomte.fr/download/ed-spim/image/logos/ub.jpg)]
 
 Group2 :
  ```html
@@ -18,10 +19,6 @@ Group2 :
 So in practice the robot will you slam and detect 3D geometric forms as sphere a cube
 ...
  
- Ms CV- 2016 - University of Burgundy
- 
- 
- Group 2 (CASPANI Bastien, KATRINI Chrysanthi, CHARALAMPAKI Eirini)
 
 ## Installation and requiered package
 Please use the content and place it on  your workspace.
@@ -36,3 +33,8 @@ Our project is design to use **catkin** compiler
 
 
 ## References used
+
+http://www.turtlebot.com/ 
+
+ Ms CV- 2016 - University of Burgundy
+ 
