@@ -11,8 +11,9 @@ Group2 :
  ```html
 <CASPANI Bastien
  ``` 
- ## Project summary
- 
+
+## The project scenario
+
 > The scenario of our project is that Tbot the turtlebot is arriving on a foreign environement and need to move automosly and identify tools.
 So in practice the robot will you slam and detect 3D geometric forms as sphere a cube
 ...
