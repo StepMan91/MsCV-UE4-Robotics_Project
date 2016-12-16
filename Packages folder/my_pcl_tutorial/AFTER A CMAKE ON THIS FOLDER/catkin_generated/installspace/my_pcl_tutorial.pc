@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: my_pcl_tutorial
+Description: Description of my_pcl_tutorial
+Version: 0.0.0
+Cflags: 
+Libs: -L/usr/local/lib 
+Requires: 

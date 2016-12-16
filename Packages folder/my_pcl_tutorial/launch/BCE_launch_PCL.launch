@@ -1,0 +1,68 @@
+<launch>
+
+<!--  TURTLE BOT GAZEBO WORLD -------------------------------------------------  -->
+
+  <arg name="world_file"  default="$(env TURTLEBOT_GAZEBO_WORLD_FILE)"/>
+
+  <arg name="base"      value="$(optenv TURTLEBOT_BASE kobuki)"/> <!-- create, roomba -->
+  <arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>  <!-- /proc/acpi/battery/BAT0 --> 
+  <arg name="gui" default="true"/>
+  <arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons --> 
+  <arg name="3d_sensor" value="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro --> 
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="world_name" value="$(arg world_file)"/>
+  </include>
+  
+  <include file="$(find turtlebot_gazebo)/launch/includes/$(arg base).launch.xml">
+    <arg name="base" value="$(arg base)"/>
+    <arg name="stacks" value="$(arg stacks)"/>
+    <arg name="3d_sensor" value="$(arg 3d_sensor)"/>
+  </include>
+  
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="30.0" />
+  </node>
+  
+
+  <!-- Fake laser -->
+  <node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan"
+        args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager">
+    <param name="scan_height" value="10"/>
+    <param name="output_frame_id" value="/camera_depth_frame"/>
+    <param name="range_min" value="0.45"/>
+    <remap from="image" to="/camera/depth/image_raw"/>
+    <remap from="scan" to="/scan"/>
+  </node>
+<!--  ----------------   ----------------         -            ---    --------------------------------------------  -->
+
+<!--  ---------------- TURTLEBOT BRINGUP --------------------------------------------  -->
+
+ <!-- ***************************** Rocon Master Info ************************** -->
+  <arg name="robot_description"                 default="Kick-ass ROS turtle"/>
+
+  <!-- Capabilities --> 
+  <arg name="capabilities"                      default="true" doc="start and register an underlying capability server"/>
+  <arg name="capabilities_server_name"          default="capability_server"/>
+  <arg name="capabilities_nodelet_manager_name" default="capability_server_nodelet_manager" />
+  <arg name="capabilities_parameters"           default="$(find turtlebot_bringup)/param/capabilities/defaults_tb2.yaml"  doc="preload the capability server with this configurations" /> <!-- defaults_tb.yaml, defaults_tb2.yaml -->
+  <arg name="capabilities_package_whitelist"    default="[kobuki_capabilities, std_capabilities, turtlebot_capabilities]" doc="register capabilities from these packages only" /> 
+  <arg name="capabilities_blacklist"            default="['std_capabilities/Navigation2D', 'std_capabilities/MultiEchoLaserSensor']" doc="blacklist these specific capabilities from being registered" />
+
+  <!-- Interactions --> 
+  <arg name="interactions"      default="true"  doc="start an interactions manager"/>
+  <arg name="interactions_list" default="$(env TURTLEBOT_INTERACTIONS_LIST)" doc="a list of filenames that provide interactions specifications."/>
+
+<!--  ----------------   ----------------         -            ---    --------------------------------------------  -->
+
+
+<!--  ---------------- SPECIAL RVIZ  --------------------------------------------  -->
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_rviz_launchers)/rviz/navigation.rviz"/>
+<!--  ----------------   ----------------         -            ---    --------------------------------------------  -->
+
+</launch>

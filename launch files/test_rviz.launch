@@ -1,0 +1,33 @@
+<!--
+  Used for visualising turtlebot in action.  
+  
+  It requires minimal.launch and optionally 3dsensor.launch to already be up and running.
+ -->
+<launch>
+
+  
+  <!-- Run our rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="/home/bc/ros/indigo/catkin_ws/src/my_pcl_tutorial/rviz/bce_robot_view_v1.rviz" />
+
+  <!-- Run a rqt plot of the movement-->
+<node name="Global_rqt_graph"
+        pkg="rqt_graph"
+        type="rqt_graph"
+        />
+  <!--  args="/joint_states/position[0] /joint_states/position[1]" -->
+
+ <node pkg="nodelet" type="nodelet" name="pcl_manager" args="manager" output="screen" />
+
+  <!-- Run a passthrough filter to clean NaNs -->
+  <node pkg="nodelet" type="nodelet" name="passthrough" args="load pcl/PassThrough pcl_manager" output="screen">
+    <remap from="~input" to="/camera/depth/points" />
+    <rosparam>
+      filter_field_name: z
+      filter_limit_min: 0.01
+      filter_limit_max: 1.5
+      filter_limit_negative: False
+    </rosparam>
+  </node>
+
+
+</launch>

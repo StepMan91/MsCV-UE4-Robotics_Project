@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/bc/ros/indigo/catkin_ws/src/my_pcl_tutorial/devel/setup.sh
