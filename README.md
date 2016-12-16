@@ -1,6 +1,6 @@
 # Master in Computer Vision - UE4 - Robotics Project
 
-![N|Solid](https://www.google.lu/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwisvurd3vjQAhUEBBoKHQeqDNwQjRwIBw&url=https%3A%2F%2Fwww.linkedin.com%2Fedu%2Funiversit%25C3%25A9-de-bourgogne-12490&bvm=bv.142059868,d.d2s&psig=AFQjCNErheraaLOUOSKU3yRSvEyUNgTc8g&ust=1481978624758121)
+![N|Solid](https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAIEAAAAJGUxMGNmYWYxLTUxMGYtNDU5Zi05ZDE2LTZjNDZkMzgwYjE2Mw.png)
 
 Group2 :
  ```html
