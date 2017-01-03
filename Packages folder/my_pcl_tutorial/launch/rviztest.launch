@@ -1,0 +1,9 @@
+<launch>
+  <node name="rviz_instance1" pkg="rviz" type="rviz">
+    <env name="ROS_MASTER_URI" value="http://localhost:11311" />
+  </node>
+
+  <node name="rviz_instance2" pkg="rviz" type="rviz">
+    <env name="ROS_MASTER_URI" value="http://localhost:11312" />
+  </node>
+</launch>

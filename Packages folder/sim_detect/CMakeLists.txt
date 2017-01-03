@@ -1,27 +1,18 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(my_pcl_tutorial)
+project(sim_detect)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  pcl_conversions
-  pcl_ros
   roscpp
-  sensor_msgs
-  nodelet 
-  dynamic_reconfigure
+  rospy
+  std_msgs
   tf
+  dynamic_reconfigure
   message_generation
-nav_msgs
+  nav_msgs
 )
-
-
-
-#set(CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
-
-
-#generate_dynamic_reconfigure_options(cfg/Configbce.cfg)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -57,10 +48,10 @@ nav_msgs
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-###### add_message_files(
-######   FILES
-######   objectdetect.msg
-###### )
+add_message_files(
+FILES
+objectdetect.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -77,10 +68,10 @@ nav_msgs
 # )
 
 ## Generate added messages and services with any dependencies listed here
-###### generate_messages(
-######   DEPENDENCIES
-   #sensor_msgs
- ######)
+generate_messages(
+ DEPENDENCIES
+#   #std_msgs
+  )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -112,11 +103,18 @@ nav_msgs
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
- LIBRARIES my_pcl_tutorial
- CATKIN_DEPENDS pcl_conversions pcl_ros roscpp sensor_msgs nodelet dynamic_reconfigure tf nav_msgs message_runtime
-#    CATKIN_DEPENDS roscpp sensor_msgs image_transport nodelet dynamic_reconfigure tf pcl_conversions pcl_msgs pcl_ros
- DEPENDS system_lib boost_system PCL
+#  INCLUDE_DIRS include
+#  LIBRARIES sim_detect
+ CATKIN_DEPENDS 
+  roscpp
+  rospy
+  std_msgs
+  tf
+  dynamic_reconfigure
+  message_generation
+  message_runtime
+  nav_msgs
+#  DEPENDS system_lib
 )
 
 ###########
@@ -130,68 +128,29 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-find_package(PCL 1.2 REQUIRED)
-#
-include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
-
 ## Declare a C++ library
-# add_library(my_pcl_tutorial
-#   src/${PROJECT_NAME}/my_pcl_tutorial.cpp
+# add_library(sim_detect
+#   src/${PROJECT_NAME}/sim_detect.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(my_pcl_tutorial ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(sim_detect ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(my_pcl_tutorial_node src/my_pcl_tutorial_node.cpp)
-add_executable(example src/example.cpp)
-target_link_libraries(example ${catkin_LIBRARIES})
-
-#add_executable(pclpub src/pclpublisher.cpp)
-#target_link_libraries (pclpub ${PCL_LIBRARIES})
-
-
-add_executable (random_sample_consensus src/random_sample_consensus.cpp)
-target_link_libraries (random_sample_consensus ${PCL_LIBRARIES})
-
-
-add_executable (template_alignment src/template_alignment.cpp)
-target_link_libraries (template_alignment ${PCL_LIBRARIES})
-
-
-##add_executable(sim_detection_node src/sim_detection.cpp)
-#add_dependencies(sim_detection_node )
-##target_link_libraries (template_alignment ${catkin_LIBRARIES})
-
-
-#correspondence_grouping
-
-
-#add_executable (test_random_walker2 src/test_random_walker2.cpp)
-#target_link_libraries (test_random_walker2 ${PCL_LIBRARIES})
-
-
-#add_executable (pfh_descriptor src/pfh_descriptor.cpp)
-#target_link_libraries (pfh_descriptor ${PCL_LIBRARIES})
-
-
-#add_executable(ex1 src/ex1.cpp)
-#add_executable(voxel_grid src/voxel_grid.cpp)
+ add_executable(sim_detect_node src/sim_detect.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(my_pcl_tutorial_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ add_dependencies(sim_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}
+sim_detect_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(my_pcl_tutorial_node
-#   ${catkin_LIBRARIES}
-# )
+ target_link_libraries(sim_detect_node
+   ${catkin_LIBRARIES}
+ )
 
-#target_link_libraries(voxel_grid ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############
@@ -207,7 +166,7 @@ target_link_libraries (template_alignment ${PCL_LIBRARIES})
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS my_pcl_tutorial my_pcl_tutorial_node
+# install(TARGETS sim_detect sim_detect_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -232,7 +191,7 @@ target_link_libraries (template_alignment ${PCL_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_my_pcl_tutorial.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_sim_detect.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
