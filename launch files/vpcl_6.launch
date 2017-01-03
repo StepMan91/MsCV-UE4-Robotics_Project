@@ -1,0 +1,87 @@
+<!--
+  Used for visualising turtlebot in action.  
+  
+  It requires minimal.launch and optionally 3dsensor.launch to already be up and running.
+ -->
+<launch>
+
+ <arg name="world_file"  default="$(env TURTLEBOT_GAZEBO_WORLD_FILE)"/>
+
+  <arg name="base"      value="$(optenv TURTLEBOT_BASE kobuki)"/> <!-- create, roomba -->
+  <arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>  <!-- /proc/acpi/battery/BAT0 --> 
+  <arg name="gui" default="true"/>
+  <arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons --> 
+  <arg name="3d_sensor" value="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro --> 
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="world_name" value="$(arg world_file)"/>
+  </include>
+  
+  <include file="$(find turtlebot_gazebo)/launch/includes/$(arg base).launch.xml">
+    <arg name="base" value="$(arg base)"/>
+    <arg name="stacks" value="$(arg stacks)"/>
+    <arg name="3d_sensor" value="$(arg 3d_sensor)"/>
+  </include>
+  
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="30.0" />
+  </node>
+  
+
+  <!-- Fake laser -->
+  <node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan"
+        args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager">
+    <param name="scan_height" value="10"/>
+    <param name="output_frame_id" value="/camera_depth_frame"/>
+    <param name="range_min" value="0.45"/>
+    <remap from="image" to="/camera/depth/image_raw"/>
+    <remap from="scan" to="/scan"/>
+  </node>
+    <!-- Run our rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_rviz_launchers)/rviz/Tbot_view_4.rviz" />
+  
+<!-- Run a GLOBAL RQT GRAPH  to check topics-->
+
+<node name="Global_rqt_graph"
+        pkg="rqt_graph"
+        type="rqt_graph"
+        />
+
+		
+		
+		
+ <node pkg="nodelet" type="nodelet" name="pcl_manager" args="manager" output="screen" />
+
+  <!-- Run a Voxel Grid filter -->
+  <node pkg="nodelet" type="nodelet" name="voxel_grid" args="load pcl/VoxelGrid pcl_manager" output="screen">
+    <remap from="~input" to="/camera/depth/points" />
+    <rosparam>
+      filter_field_name: z
+      filter_limit_min: 0.5
+      filter_limit_max: 1.5
+      filter_limit_negative: False
+      leaf_size: 0.01
+    </rosparam>
+  </node>
+
+  <!-- Run a Planar Segmentation filter -->
+  <node pkg="nodelet" type="nodelet" name="sac_plane" args="load pcl/SACSegmentation pcl_manager" output="screen">
+    <remap from="~input" to="/voxel_grid/output" />
+    <rosparam>
+      model_type: 0
+      distance_threshold: 0.01
+    </rosparam>
+  </node>
+
+  <!-- Then Extract the Inlier Points -->
+  <node pkg="nodelet" type="nodelet" name="extract_plane" args="load pcl/ExtractIndices pcl_manager" output="screen">
+    <remap from="~input" to="/voxel_grid/output" />
+    <remap from="/extract_plane/indices" to="/sac_plane/inliers" />
+  </node>
+</launch>
+
